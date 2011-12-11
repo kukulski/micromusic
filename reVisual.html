@@ -5,6 +5,7 @@
     <script src="makeSamples.js"></script>
     <script src="benmu-riff.js"></script>
     <script src="benmu-dataurl.js"></script>
+    <script src="sampleToImage.js"></script>
 
     <link type="text/css" href="style.css" rel="stylesheet"/>
 
@@ -15,6 +16,10 @@
     <input type="submit" value="Generate Sound" id="gen" />
 </form>
 <div id="error"></div>
+<pre>[enter] : play
+[esc]   : pause
+</pre>
+<canvas id="canvas" width="1024" height="128"></canvas>
 <audio id="player" autoplay="true" controls="true"/>
 
 <script>
@@ -26,8 +31,11 @@
     function onPlay() {
         var oneLiner = document.getElementById('oneliner').value;
         sampleData = makeSampleData(oneLiner);
+
         play(sampleData);
+        generatePreview(sampleData,1,document.getElementById('canvas'));
     }
+
     document.getElementById("oneliner").focus();
     document.getElementById("oneliner").onkeydown = onKey;
     document.getElementById("gen").onclick = onPlay;

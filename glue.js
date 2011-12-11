@@ -9,7 +9,7 @@
 var playerElement;
 
 function stop() {
-    if (playerElement) playerElement.removeAttribute("src");
+    if (playerElement) playerElement.pause();
 }
 
 function playDataURI(uri) {
@@ -20,12 +20,12 @@ function playDataURI(uri) {
         alert("You don't seem to have a browser that supports audio. It's ok, you're not a bad person. But this app will now fail.");
 
     playerElement.setAttribute("src", uri);
+    playerElement.play();
 }
 
-function play() {
+function play(bits) {
     try {
-        var oneLiner = document.getElementById('oneliner').value;
-        var riffData = makeRiff(oneLiner);
+        var riffData = makeRiff(bits);
         var url = makeDataUrl("audio/x-wav", riffData);
         playDataURI(url);
         document.getElementById('error').innerText = "";

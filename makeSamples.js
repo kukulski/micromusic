@@ -31,12 +31,17 @@ function generateSound(f,seconds,frequency,bitsPerSample,channels) {
     return sampleArray;
 }
 
-function makeRiff(rawOneLiner) {
-
+function makeSampleData(rawOneLiner) {
     var sampleFunction = makeSampleFunction(rawOneLiner);
     var bitsPerSample = 16;
-    var frequency = 8000;
+    var frequency = 22000;
     var channels = 1;
-    var samples = generateSound(sampleFunction,30,frequency,bitsPerSample,channels);
+    return generateSound(sampleFunction,30,frequency,bitsPerSample,channels);
+
+}
+function makeRiff(samples) {
+    var bitsPerSample = 16;
+    var frequency = 22000;
+    var channels = 1;
     return RIFFChunk(channels, bitsPerSample, frequency,samples);
 }

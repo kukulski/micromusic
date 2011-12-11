@@ -110,7 +110,7 @@ var lastPosition;
 function generatePreview(data) {
     var channels = data.channelCount;
     var soundData = data.sampleArray;
-    
+
     //get canvas element
     canvas = document.getElementById('canvas');
     //get drawing context from canvas element
@@ -182,7 +182,6 @@ function generatePreview(data) {
     //write image data to canvas
     ctx.putImageData(imgd, 0, 0);
 }
-
 
 
 function onTimeUpdate() {

@@ -1,0 +1,59 @@
+#oneliner, #oneliner2 {
+    font-size: 22px;
+    padding: 5px;
+    width: 100%;
+    font-family: monospace;
+    color: #99ff99;
+    background: black;
+    text-shadow: 0px 0px 2px #ffffff;
+}
+
+#t0, #tmod, #duration, #separation {
+    font-size: 16px;
+    padding: 5px;
+    font-family: monospace;
+    color: #99ff99;
+    background: black;
+    text-shadow: 0px 0px 2px #ffffff;
+    text-align: left;
+}
+
+.centered_table {
+    margin-left: auto;
+    margin-right: auto;
+    font-family: monospace;
+    width: 90%;
+}
+
+.link_table {
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+}
+
+.leftaligned {
+    text-align: left;
+}
+
+.rightaligned {
+    text-align: right;
+    width: 5%;
+}
+
+#link, #bbcode {
+    text-align: left;
+    width: 70%;
+}
+
+#gen {
+    font-family: monospace;
+    font-size: 30px;
+    padding: 10px;
+    width: 100%;
+}
+
+#player {
+    text-align: center;
+    width: 90%;
+}
+ 

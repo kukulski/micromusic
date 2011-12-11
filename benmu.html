@@ -1,0 +1,61 @@
+<html>
+	<head>
+		<script src="benmu-magic.js"></script>
+		<style>
+			#oneliner {
+				font-size:22px;
+				padding:5px;
+				width: 80%;
+				font-family: monospace;
+				color:#99ff99;
+				background:black;
+				text-shadow: 0px 0px 2px #ffffff;
+			}
+			#gen {
+				font-family: monospace;
+				font-size:30px;
+				padding:10px;
+				width:80%;
+			}
+		</style>
+	</head>
+	<body>
+		<center>
+			<br/><br/><br/>
+			<form onsubmit="play();return false;">
+			<input type="text" id="oneliner" value="t * ((t>>12|t>>8)&63&t>>4)"/><br/>
+			<input type="submit" value="Generate Sound" id="gen"/>
+			</form>
+			<br/><br/><span id="error"></span><br/>
+			<div id="player"></div>
+			<br/><br/><br/>
+		</center>
+			<pre>
+			For example:<br/><br/>
+			(t*(t>>8+t>>9)*100)+sin(t)
+			<br/>
+			Or try some from <a href="http://www.youtube.com/watch?v=GtQdIYUtAHg" target="_new">viznut's video</a>.
+			</pre>
+		<script>
+			function play() {
+				try {
+					playDataURI(makeURL());
+					document.getElementById('error').innerText = "";
+				} catch (err) {
+					document.getElementById('error').innerText = ""+err;
+				}
+			}
+
+			var x = document.createElement('audio');
+			var hasAudio = typeof(x.play) !== 'undefined';
+			if (!hasAudio) {
+				alert("You don't seem to have a browser that supports audio. It's ok, you're not a bad person. But this app will now fail.");
+			}
+
+			document.getElementById("oneliner").focus();
+			document.getElementById("gen").onclick = function () {
+				play();
+			};
+		</script>
+	</body>
+</html>

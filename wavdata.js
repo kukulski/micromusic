@@ -1,6 +1,5 @@
 // refactored from http://wurstcaptures.untergrund.net/music/magic.js
 
-
 String.prototype.toCharCodes = function() {
     var count = this.length;
     if (count == 1) {
@@ -11,7 +10,6 @@ String.prototype.toCharCodes = function() {
         out[i] = this.charCodeAt(i);
     return out;
 };
-
 
 (function() {
 
@@ -104,7 +102,3 @@ SampleData.protype = {
         return [l & 0xff, (l & 0xff00) >> 8, (l & 0xff0000) >> 16, (l & 0xff000000) >> 24];
     }
 };
-
-//TODO: additional changes will be needed when we switch to typed arrays
-
-

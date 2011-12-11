@@ -36,7 +36,7 @@ function generateSound() {
         
         sampleArray.push(sample);
     }
-    return [frequency, sampleArray];
+    return sampleArray;
 }
 
 // [255, 0] -> "%FF%00"
@@ -119,9 +119,8 @@ function RIFFChunk(channels, bitsPerSample, frequency, sampleArray) {
 
 function makeURL() {
     var bitsPerSample = 16;    
-    var generated = generateSound();
-    var frequency = generated[0];
-    var samples = generated[1];
+    var frequency = 8000;
+    var samples = generateSound();
     var channels = 1;
     return "data:audio/x-wav," + b(RIFFChunk(channels, bitsPerSample, frequency,samples));    
 }

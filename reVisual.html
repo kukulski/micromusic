@@ -23,10 +23,14 @@
 <audio id="player" autoplay="true" controls="true"/>
 
 <script>
-    var keyMap = { 13: play, 27: stop};
+    var keyMap = { 13: onPlay, 27: stop};
     var sampleFunction = null;
     var errDiv = document.getElementById("error");
     var oneLinerElt = document.getElementById('oneliner');
+    var canvas = document.getElementById('canvas');
+    var imageData = getImageData(canvas);
+    fillAlphas(imageData);
+
     function onKey(event) {
         var fn = keyMap[event.keyCode];
         if(fn) fn();
@@ -46,12 +50,16 @@
         sampleData = makeSampleData(sampleFunction);
 
         play(sampleData);
-        generatePreview(sampleData,1,document.getElementById('canvas'));
+        drawIntoOneChannelImage(imageData,sampleData);
+        canvas.getContext("2d").putImageData(imageData,0,0);
     }
 
     document.getElementById("oneliner").focus();
     document.getElementById("oneliner").onkeyup = onKey;
     document.getElementById("gen").onclick = onPlay;
+
+    initPreview()
+
 </script>
 </body>
 </html>

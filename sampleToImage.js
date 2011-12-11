@@ -11,7 +11,16 @@ function generatePreview(soundData,channels, canvas) {
     ctx.putImageData(imgD, 0, 0);
 }
 
-function getImageD(canvas){
+function fillAlphas(imageData) {
+    var count = imageData.width*imageData.height*4;
+    var idx = 3;
+    var pix = imageData.data;
+    while(idx < count) {
+        pix[idx] = 255;
+        idx+=4;
+    }
+}
+function getImageData(canvas){
     var ctx = canvas.getContext("2d");
     var width = canvas.width;
     var height = canvas.height;
@@ -48,11 +57,11 @@ function drawIntoOneChannelImage(imgd, soundData) {
 
     var count = Math.min(soundData.length, width*height);
     var writePx = 0;
-    for(var i = 0; i < count; ++i) {
-        pix[writePx] = (soundData[i]>>8)+128;
-        writePx+= 3;
-       pix[writePx++] = 255;
-      }
+    var i = 0;
+    while(i < count) {
+        pix[writePx] = (soundData[i++]>>8)+128;
+        writePx+= 4;
+     }
 }
 
 function drawIntoImage(imgd, soundData, channels) {

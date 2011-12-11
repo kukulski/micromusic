@@ -5,7 +5,9 @@ var replacements = {
     cos: "Math.cos",
     tan: "Math.tan",
     floor: "Math.floor",
-    ciel: "Math.ceil"
+    ciel: "Math.ceil",
+    pi:"Math.PI",
+    round:"Math.round"
 };
 
 function preprocessFunction(oneLiner) {

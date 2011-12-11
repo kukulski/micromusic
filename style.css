@@ -53,10 +53,14 @@
 }
 
 #canvas {
+    bottom:100px;
+    position: absolute;
     transform: matrix(0,1,-1,0,0,0);
-    -webkit-transform: matrix(0,1,-1,0,0,-256);
+    -webkit-transform: matrix(0,1,-1,0,0,100);
 }
 #player {
+     position: absolute;
+    bottom: 0;
     text-align: center;
     width: 100%;
 }

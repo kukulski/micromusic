@@ -5,18 +5,32 @@
  * Time: 7:15 PM
  * To change this template use File | Settings | File Templates.
  */
-var el;
+
+var playerElement;
 
 function stop() {
-    if (el) document.getElementById('player').removeChild(el);
-    el = null;
+    if (playerElement) playerElement.removeAttribute("src");
 }
 
 function playDataURI(uri) {
     stop();
-    el = document.createElement("audio");
-    el.setAttribute("autoplay", true);
-    el.setAttribute("src", uri);
-    el.setAttribute("controls", "controls");
-    document.getElementById('player').appendChild(el);
+    playerElement = document.getElementById("player");
+
+    if(typeof(playerElement.play) == 'undefined')
+        alert("You don't seem to have a browser that supports audio. It's ok, you're not a bad person. But this app will now fail.");
+
+    playerElement.setAttribute("src", uri);
 }
+
+function play() {
+    try {
+        var oneLiner = document.getElementById('oneliner').value;
+        var riffData = makeRiff(oneLiner);
+        var url = makeDataUrl("audio/x-wav", riffData);
+        playDataURI(url);
+        document.getElementById('error').innerText = "";
+    } catch (err) {
+        document.getElementById('error').innerText = "" + err;
+    }
+}
+

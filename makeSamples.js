@@ -1,50 +1,42 @@
 // Code in ~2 hours by Bemmu, idea and sound code snippet from Viznut.
 
+var replacements = {
+    sin: "Math.sin",
+    cos: "Math.cos",
+    tan: "Math.tan",
+    floor: "Math.floor",
+    ciel: "Math.ceil"
+};
 
-function makeSampleFunction() {
-//    var oneLiner = "t * ((t>>12|t>>8)&63&t>>4);";
-    var oneLiner = document.getElementById('oneliner').value;//"t * (t>>9) * (t>>8)";
-    
-    var oneLiner = oneLiner.replace(/sin/g, "Math.sin");
-    var oneLiner = oneLiner.replace(/cos/g, "Math.cos");
-    var oneLiner = oneLiner.replace(/tan/g, "Math.tan");
-    var oneLiner = oneLiner.replace(/floor/g, "Math.floor");
-    var oneLiner = oneLiner.replace(/ceil/g, "Math.ceil");
-    
-    if (window.console) {
-	console.log(oneLiner);
+function preprocessFunction(oneLiner) {
+
+    for(var key in replacements) {
+        oneLiner = oneLiner.replace(RegExp(key,'g'),replacements[key]);
     }
-
+    return oneLiner;
+}
+function makeSampleFunction(rawOneLiner) {
+    var oneLiner = preprocessFunction(rawOneLiner);
     eval("var f = function (t) { return " + oneLiner + "}");
     return f;
 }
 
 function generateSound(f,seconds,frequency,bitsPerSample,channels) {
-    var sampleArray = [];
+    var count = frequency*seconds;
+    var sampleArray = new Uint16Array(count);
 
-    for (var t = 0; t < frequency*seconds; t++) {
-        // Between 0 - 65535
-//        var sample = Math.floor(Math.random()*65535);
-        
-        var sample = (f(t)) & 0xff;
-        sample *= 256;
-        if (sample < 0) sample = 0;
-        if (sample > 65535) sample = 65535;
-        
-        sampleArray.push(sample);
-    }
+    for (var t = 0; t < count; t++)
+        sampleArray[t] = (f(t) & 0xff)<<8;;
+    
     return sampleArray;
 }
 
+function makeRiff(rawOneLiner) {
 
-function makeURL() {
-    var sampleFunction = makeSampleFunction();
-    var bitsPerSample = 16;    
+    var sampleFunction = makeSampleFunction(rawOneLiner);
+    var bitsPerSample = 16;
     var frequency = 8000;
     var channels = 1;
     var samples = generateSound(sampleFunction,30,frequency,bitsPerSample,channels);
-    var riffData = RIFFChunk(channels, bitsPerSample, frequency,samples);
-    var mimeType = "audio/x-wav";
-    return makeDataUrl(mimeType, riffData);
+    return RIFFChunk(channels, bitsPerSample, frequency,samples);
 }
-    

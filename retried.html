@@ -1,52 +1,26 @@
+<!DOCTYPE HTML>
 <html>
-	<head>
-        <script src="glue.js"> </script>
-        <script src="makeSamples.js"></script>
-        <script src="benmu-riff.js"></script>
-        <script src="benmu-dataurl.js"></script>
+<head>
+    <script src="glue.js"></script>
+    <script src="makeSamples.js"></script>
+    <script src="benmu-riff.js"></script>
+    <script src="benmu-dataurl.js"></script>
 
-        <link type="text/css" href="style.css" rel="stylesheet"/>
+    <link type="text/css" href="style.css" rel="stylesheet"/>
 
-	</head>
-	<body>
-		<center>
-			<br/><br/><br/>
-			<form onsubmit="play();return false;">
-			<input type="text" id="oneliner" value="t * ((t>>12|t>>8)&63&t>>4)"/><br/>
-			<input type="submit" value="Generate Sound" id="gen"/>
-			</form>
-			<br/><br/><span id="error"></span><br/>
-			<div id="player"></div>
-			<br/><br/><br/>
-		</center>
-			<pre>
-			For example:<br/><br/>
-			(t*(t>>8+t>>9)*100)+sin(t)
-			<br/>
-			Or try some from <a href="http://www.youtube.com/watch?v=GtQdIYUtAHg" target="_new">viznut's video</a>.
-			</pre>
-		<script>
-			function play() {
-				try {
+</head>
+<body>
+<form onsubmit="play();return false;">
+    <input type="text" id="oneliner" value="t * ((t>>12|t>>8)&63&t>>4)"/><br/>
+    <input type="submit" value="Generate Sound" id="gen" onclick="play()"/>
+</form>
+<div id="error"></div>
+<audio id="player" autoplay="true" controls="true"/>
 
-					playDataURI(makeURL());
-					document.getElementById('error').innerText = "";
-				} catch (err) {
-					document.getElementById('error').innerText = ""+err;
-				}
-			}
-
-			var x = document.createElement('audio');
-			var hasAudio = typeof(x.play) !== 'undefined';
-			if (!hasAudio) {
-				alert("You don't seem to have a browser that supports audio. It's ok, you're not a bad person. But this app will now fail.");
-			}
-
-			document.getElementById("oneliner").focus();
-			document.getElementById("gen").onclick = function () {
-				play();
-			};
-            play();
-		</script>
-	</body>
+<script>
+    document.getElementById("oneliner").focus();
+//    document.getElementById("gen").onclick = play;
+    play();
+</script>
+</body>
 </html>

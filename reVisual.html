@@ -19,25 +19,38 @@
 <pre>[enter] : play
 [esc]   : pause
 </pre>
-<canvas id="canvas" width="1024" height="128"></canvas>
+<canvas id="canvas" width="256" height="1024"></canvas>
 <audio id="player" autoplay="true" controls="true"/>
 
 <script>
     var keyMap = { 13: play, 27: stop};
+    var sampleFunction = null;
+    var errDiv = document.getElementById("error");
+    var oneLinerElt = document.getElementById('oneliner');
     function onKey(event) {
         var fn = keyMap[event.keyCode];
         if(fn) fn();
+        else {
+            onPlay();
+        }
+    }
+    function updateFunction() {
+       var oneLiner = oneLinerElt.value;
+       sampleFunction = makeSampleFunction(oneLiner,errDiv);
     }
     function onPlay() {
-        var oneLiner = document.getElementById('oneliner').value;
-        sampleData = makeSampleData(oneLiner);
+
+        updateFunction();
+        if(!sampleFunction) return;
+        
+        sampleData = makeSampleData(sampleFunction);
 
         play(sampleData);
         generatePreview(sampleData,1,document.getElementById('canvas'));
     }
 
     document.getElementById("oneliner").focus();
-    document.getElementById("oneliner").onkeydown = onKey;
+    document.getElementById("oneliner").onkeyup = onKey;
     document.getElementById("gen").onclick = onPlay;
 </script>
 </body>

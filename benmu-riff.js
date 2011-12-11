@@ -15,6 +15,7 @@ function split32bitValueToBytes(l) {
     return [l&0xff, (l&0xff00)>>8, (l&0xff0000)>>16, (l&0xff000000)>>24];
 }
 
+// https://ccrma.stanford.edu/courses/422/projects/WaveFormat/
 
 function FMTSubChunk(channels, bitsPerSample, frequency) {
     var byteRate = frequency * channels * bitsPerSample/8;

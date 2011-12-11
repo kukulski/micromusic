@@ -1,8 +1,11 @@
 function generatePreview(soundData,channels, canvas) {
 
     var imgD = getImageD(canvas);
-    drawIntoImage(imgD, soundData,channels);
-
+    if(channels == 1)
+        drawIntoOneChannelImage(imgD, soundData);
+    else
+        drawIntoImage(imgD, soundData, channels);
+    
     var ctx = canvas.getContext("2d");
     //write image data to canvas
     ctx.putImageData(imgD, 0, 0);
@@ -26,14 +29,30 @@ function getImageD(canvas){
         ctx.fillStyle = "#FF0000FF";
         ctx.fillRect(0, 0, width, height);
     } else if (ctx.getImageData) {
-        imgd = ctx.getImageData(0, 0, width, height);
-        //clear image
         ctx.fillStyle = "#FF0000FF";
         ctx.fillRect(0, 0, width, height);
+        imgd = ctx.getImageData(0, 0, width, height);
+        //clear image
+
     } else {
         imgd = {'width' : width, 'height' : height, 'data' : new Array(width * height * 4)};
     }
     return imgd;
+}
+
+function drawIntoOneChannelImage(imgd, soundData) {
+    //get actual pixel data
+    var pix = imgd.data;
+    var width = imgd.width;
+    var height = imgd.height;
+
+    var count = Math.min(soundData.length, width*height);
+    var writePx = 0;
+    for(var i = 0; i < count; ++i) {
+        pix[writePx] = (soundData[i]>>8)+128;
+        writePx+= 3;
+       pix[writePx++] = 255;
+      }
 }
 
 function drawIntoImage(imgd, soundData, channels) {

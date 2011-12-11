@@ -52,8 +52,12 @@
     width: 100%;
 }
 
+#canvas {
+    transform: matrix(0,1,-1,0,0,0);
+    -webkit-transform: matrix(0,1,-1,0,0,-256);
+}
 #player {
     text-align: center;
-    width: 90%;
+    width: 100%;
 }
  

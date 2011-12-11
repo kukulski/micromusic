@@ -15,33 +15,54 @@ function preprocessFunction(oneLiner) {
     }
     return oneLiner;
 }
-function makeSampleFunction(rawOneLiner) {
-    var oneLiner = preprocessFunction(rawOneLiner);
-    eval("var f = function (t) { return " + oneLiner + "}");
-    return f;
+function makeSampleFunction(rawOneLiner,elt) {
+    try {
+        var oneLiner = preprocessFunction(rawOneLiner);
+         eval("var f = function (t) { return " + oneLiner + "}");
+        return f;
+       } catch(e) {
+        if(elt) elt.innerHTML = e.toString();
+        return null;
+    } 
 }
 
-function generateSound(f,seconds,frequency,bitsPerSample,channels) {
-    var count = frequency*seconds;
-    var sampleArray = new Uint16Array(count);
 
-    for (var t = 0; t < count; t++)
-        sampleArray[t] = (f(t) & 0xff)<<8;;
-    
+function generateSound(f,seconds,frequency,bitsPerSample,channels) {
+    var count = frequency*seconds*channels;
+    var sampleArray = bitsPerSample == 16 ? new Int16Array(count): new Uint8Array(count);
+
+
+    for (var t = 0; t < count; t++) {
+        var sample = f(t) & 0xff;
+        sampleArray[t] = sample<<8 | sample;
+    }
     return sampleArray;
 }
 
-function makeSampleData(rawOneLiner) {
-    var sampleFunction = makeSampleFunction(rawOneLiner);
+function genSound16x1(f,count) {
+    var sampleArray =  new Int16Array(count);
+
+    for (var t = 0; t < count; t++) {
+        sampleArray[t] = ((f(t)*256) % 0xffff)-32768;
+    }
+    return sampleArray;
+}
+
+
+function makeSampleData(sampleFunction) {
     var bitsPerSample = 16;
-    var frequency = 22000;
+    var frequency = 44100;
     var channels = 1;
-    return generateSound(sampleFunction,30,frequency,bitsPerSample,channels);
+    var duration=10;
+    var sampleCount = duration*channels*frequency;
+    return genSound16x1(sampleFunction,sampleCount);
+
+//    return generateSound(sampleFunction,30,frequency,bitsPerSample,channels);
 
 }
 function makeRiff(samples) {
     var bitsPerSample = 16;
-    var frequency = 22000;
+    var frequency = 44100;
     var channels = 1;
     return RIFFChunk(channels, bitsPerSample, frequency,samples);
 }

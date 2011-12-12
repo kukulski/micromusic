@@ -15,7 +15,7 @@
 
         void main(void) {
 
-            vec4 samples = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+            vec4 samples = texture2D(uSampler, vec2(vTextureCoord.t, vTextureCoord.s));
             float sample = samples.a;
             float adjusted = sample > .5 ? sample -.5 : .5+sample;
             gl_FragColor = vec4(adjusted, 0.0, samples.r, 1.0);
@@ -37,6 +37,6 @@
     </script>
 </head>
 <body onload="webGLStart();">
-    <canvas id="lesson05-canvas" style="top:0; left:0; position:absolute; border: none; width:100%; height:100%;"></canvas>
+    <canvas width="1024"  height="512" id="lesson05-canvas" style="top:0; left:0; position:absolute; border: none; width:100%; height:100%;"></canvas>
 </body>
 </html>

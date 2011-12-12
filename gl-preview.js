@@ -1,5 +1,4 @@
         var gl;
-        var shaderTypes;
         function initGL(canvas) {
             try {
                 gl = canvas.getContext("experimental-webgl");
@@ -53,11 +52,7 @@
             }
         }
 
-
-
-
         var shaderProgram;
-
         function initShaders() {
             var fragmentShader = gl.shaderFromElementID("shader-fs");
             var vertexShader = gl.shaderFromElementID("shader-vs");
@@ -85,8 +80,6 @@
         }
 
         var ourTexture;
-
-        var ourbuffer;
         function initTexture() {
             try{
            var texture = ourTexture = gl.createTexture();
@@ -100,12 +93,12 @@
             var val = -32768;
             for(var t = 0 ; t< count; t++) {
 
-                   sixteenBuffer[t] = val;
-                val += stepSize;
-        //        sixteenBuffer[t] = (t>>(t>>12)) | 80;
+//                   sixteenBuffer[t] = t;
+//                val += stepSize;
+                sixteenBuffer[t] = (t<<(t>>14));
             }
                    gl.bindTexture(gl.TEXTURE_2D, texture);
-                gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+           //     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
                 gl.texImage2D(gl.TEXTURE_2D,0, gl.LUMINANCE_ALPHA,
                         side,side, 0,
                         gl.LUMINANCE_ALPHA,gl.UNSIGNED_BYTE,ourbuffer);
@@ -117,14 +110,8 @@
 
         }
 
-
-        var mvMatrix = mat4.create();
-        var pMatrix = mat4.create();
-
-
         var dualUseVertexBuffer;
         var indexBuffer;
-
         function initBuffers() {
 
             dualUseVertexBuffer = gl.createBuffer();
@@ -140,7 +127,8 @@
             indexBuffer.numItems = 6;
         }
 
-
+        var mvMatrix = mat4.create();
+        var pMatrix = mat4.create();
         function drawScene() {
             gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
             gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -150,7 +138,9 @@
             mat4.identity(pMatrix);
 
             mat4.identity(mvMatrix);
-            mat4.translate(mvMatrix, [-0.5, -0.5, -0.1]);
+        //    mat4.translate(mvMatrix, [-.5,-.5, -0.1]);
+            mat4.translate(mvMatrix, [-1, -1, -0.1]);
+            mat4.scale(mvMatrix,[2,2,2]);
 
             gl.bindBuffer(gl.ARRAY_BUFFER, dualUseVertexBuffer);
             gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, dualUseVertexBuffer.itemSize, gl.FLOAT, false, 0, 0);

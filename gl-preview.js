@@ -45,12 +45,46 @@
                 };
 
 
-            } catch (e) {
+
+
+
+
+            gl.texture = null;
+            gl.initTexture = function() {
+                gl.texture = gl.createTexture();
+            };
+
+            gl.updateTexture = function (theBuffer) {
+
+                try{
+                   gl.dispo
+
+                var side = 512;
+                var ourbuffer = new Uint8Array(theBuffer);
+                var count = ourbuffer.length>>1;
+
+                var width = 256;
+                var height = 1024;
+
+                       gl.bindTexture(gl.TEXTURE_2D, gl.texture);
+               //     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+                    gl.texImage2D(gl.TEXTURE_2D,0, gl.LUMINANCE_ALPHA,
+                            width,height, 0,
+                            gl.LUMINANCE_ALPHA,gl.UNSIGNED_BYTE,ourbuffer);
+                    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+                    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+                    gl.bindTexture(gl.TEXTURE_2D, null);
+            } catch(e) { alert(e.toString());}
+
+        }
+
+            }
+            catch (e) {
             }
             if (!gl) {
                 alert("Could not initialise WebGL, sorry :-(");
             }
-        }
+        } // init GL
 
         var shaderProgram;
         function initShaders() {
@@ -79,36 +113,7 @@
             shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, "uSampler");
         }
 
-        var ourTexture;
-        function initTexture() {
-            try{
-           var texture = ourTexture = gl.createTexture();
-            var side = 512;
-                var count = side*side;
-            var arrBuff = new ArrayBuffer(count*2);
-            var sixteenBuffer = new Int16Array(arrBuff);
-            var ourbuffer = new Uint8Array(arrBuff);
 
-            var stepSize = 65536 / count;
-            var val = -32768;
-            for(var t = 0 ; t< count; t++) {
-
-//                   sixteenBuffer[t] = t;
-//                val += stepSize;
-                sixteenBuffer[t] = (t<<(t>>14));
-            }
-                   gl.bindTexture(gl.TEXTURE_2D, texture);
-           //     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-                gl.texImage2D(gl.TEXTURE_2D,0, gl.LUMINANCE_ALPHA,
-                        side,side, 0,
-                        gl.LUMINANCE_ALPHA,gl.UNSIGNED_BYTE,ourbuffer);
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-                gl.bindTexture(gl.TEXTURE_2D, null);
-        } catch(e) { alert(e.toString());}
-
-
-        }
 
         var dualUseVertexBuffer;
         var indexBuffer;
@@ -146,7 +151,7 @@
             gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, dualUseVertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
             gl.activeTexture(gl.TEXTURE0);
-            gl.bindTexture(gl.TEXTURE_2D, ourTexture);
+            gl.bindTexture(gl.TEXTURE_2D, gl.texture);
             gl.uniform1i(shaderProgram.samplerUniform, 0);
 
             gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
@@ -162,11 +167,11 @@
 
 
         function webGLStart() {
-            var canvas = document.getElementById("lesson05-canvas");
+            var canvas = document.getElementById("canvas");
             initGL(canvas);
             initShaders();
             initBuffers();
-            initTexture();
+            gl.initTexture();
 
             gl.clearColor(0.0, 0.0, 0.0, 1.0);
             gl.enable(gl.DEPTH_TEST);

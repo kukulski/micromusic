@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Uint16 Texture</title>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <link type="text/css" href="style.css" rel="stylesheet"/>
+
+    <script type="text/javascript" src="glMatrix095.js"></script>
+    <script type="text/javascript" src="webGL-utils.js"></script>
+    <script type="text/javascript" src="gl-preview.js"></script>
+    <script src="glue.js"></script>
+    <script src="makeSamples.js"></script>
+    <script src="benmu-riff.js"></script>
+    <script src="benmu-dataurl.js"></script>
+
+    <script id="shader-fs" type="text/x-fragment">
+        precision mediump float;
+        varying vec2 vTextureCoord;
+        uniform sampler2D uSampler;
+
+        void main(void) {
+
+            vec4 samples = texture2D(uSampler, vec2(vTextureCoord.t, vTextureCoord.s));
+            float sample = samples.a;
+            float adjusted = sample > .5 ? sample -.5 : .5+sample;
+            gl_FragColor = vec4(adjusted, 0.0, samples.r, 1.0);
+        }
+    </script>
+    <script id="shader-vs" type="text/x-vertex">
+        attribute vec2 aTextureCoord;
+
+        uniform mat4 uMVMatrix;
+        uniform mat4 uPMatrix;
+
+        varying vec2 vTextureCoord;
+
+        void main(void) {
+            gl_Position = uPMatrix * uMVMatrix * vec4(aTextureCoord,0.0,1.0);
+            vTextureCoord = aTextureCoord;
+        }
+    </script>
+</head>
+<body onload="webGLStart();">
+<form onsubmit="return false;">
+    <input type="text" id="oneliner" value="127*sin(t/1000)"/>
+    <input type="submit" value="Generate Sound" id="gen" />
+</form>
+<div id="error"></div>
+<canvas id="canvas" width="256" height="1024"></canvas>
+<audio id="player" autoplay="true" controls="true"/>
+<canvas width="1024"  height="512" id="canvas" ></canvas>
+
+
+<script>
+    var keyMap = { 13: onPlay, 27: stop};
+    var sampleFunction = null;
+    var errDiv = document.getElementById("error");
+    var oneLinerElt = document.getElementById('oneliner');
+
+    function onKey(event) {
+        var fn = keyMap[event.keyCode];
+        if(fn) fn();
+        else {
+            onPlay();
+        }
+    }
+    function updateFunction() {
+       var oneLiner = oneLinerElt.value;
+       sampleFunction = makeSampleFunction(oneLiner,errDiv);
+    }
+    function onPlay() {
+
+        updateFunction();
+        if(!sampleFunction) return;
+
+        sampleData = makeSampleData(sampleFunction);
+
+        play(sampleData);
+        gl.updateTexture(backBuffer);
+        drawScene();
+    }
+
+    document.getElementById("oneliner").focus();
+    document.getElementById("oneliner").onkeyup = onKey;
+    document.getElementById("gen").onclick = onPlay;
+
+
+</script>
+
+
+</body>
+</html>

@@ -41,8 +41,11 @@ function generateSound(f,seconds,frequency,bitsPerSample,channels) {
     return sampleArray;
 }
 
+var backBuffer;
+
 function genSound16x1(f,count) {
-    var sampleArray =  new Int16Array(count);
+    backBuffer = new ArrayBuffer(count*2);
+    var sampleArray =  new Int16Array(backBuffer);
 
     for (var t = 0; t < count; t++) {
         sampleArray[t] = ((f(t)*256) % 0xffff)-32768;

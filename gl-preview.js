@@ -57,9 +57,6 @@
             gl.updateTexture = function (theBuffer) {
 
                 try{
-                   gl.dispo
-
-                var side = 512;
                 var ourbuffer = new Uint8Array(theBuffer);
                 var count = ourbuffer.length>>1;
 

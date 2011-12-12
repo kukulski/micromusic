@@ -19,11 +19,26 @@
     text-align: left;
 }
 
-#gen {
-    font-family: monospace;
-    font-size: 30px;
-    padding: 10px;
-    width: 100%;
+label { font-family: Arial;}
+
+[type=button] {
+      font-size: 30px;
+    width: 25%;
+
+
+}
+
+form { width: 100%}
+[value=Stop] {
+
+
+}
+[value=Play] {
+
+}
+
+body {
+    overflow:hidden;
 }
 
 #canvas {

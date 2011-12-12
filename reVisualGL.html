@@ -23,7 +23,7 @@
             vec4 samples = texture2D(uSampler, vec2(vTextureCoord.t, vTextureCoord.s));
             float sample = samples.a;
             float adjusted = sample > .5 ? sample -.5 : .5+sample;
-            gl_FragColor = vec4(adjusted, 0.0, samples.r, 1.0);
+            gl_FragColor = vec4(adjusted, 0.0, 0.0, 1.0);
         }
     </script>
     <script id="shader-vs" type="text/x-vertex">
@@ -42,47 +42,64 @@
 </head>
 <body onload="webGLStart();">
 <form onsubmit="return false;">
-    <input type="text" id="oneliner" value="127*sin(t/1000)"/>
-    <input type="submit" value="Generate Sound" id="gen" />
+    <input type="text" id="oneliner" value="t>>7|t>>22|t"/>
+   <label for="autoPlay">Automatically play</label> <input type="checkbox" id='autoPlay' checked='false'/>
+    <input type="button" value="Play" id="gen" onclick="play()" />     <input type="button" value="Stop" id="stop" onclick="stop()" />
 </form>
 <div id="error"></div>
 <canvas id="canvas" width="256" height="1024"></canvas>
 <audio id="player" autoplay="true" controls="true"/>
 <canvas width="1024"  height="512" id="canvas" ></canvas>
-
+<p>[enter] play, [esc] stop</p>
 
 <script>
-    var keyMap = { 13: onPlay, 27: stop};
+    var keyMap = {
+        13: function() { cbAutoPlay.checked = true; onPlayButton();},
+        27: function(){ cbAutoPlay.checked = false; stop(); oneLinerElt.focus();}
+    }; //keyMap
     var sampleFunction = null;
     var errDiv = document.getElementById("error");
     var oneLinerElt = document.getElementById('oneliner');
+    var cbAutoPlay = document.getElementById("autoPlay");
+
+
+        cbAutoPlay.checked = false;
 
     function onKey(event) {
         var fn = keyMap[event.keyCode];
         if(fn) fn();
         else {
-            onPlay();
+            updateAndMaybePlay(cbAutoPlay.checked);
         }
     }
+
+
+
     function updateFunction() {
        var oneLiner = oneLinerElt.value;
        sampleFunction = makeSampleFunction(oneLiner,errDiv);
     }
-    function onPlay() {
 
+
+    function onPlayButton() {
+        updateAndMaybePlay(true);
+    }
+    function updateAndMaybePlay(playSound) {
         updateFunction();
         if(!sampleFunction) return;
 
         sampleData = makeSampleData(sampleFunction);
 
-        play(sampleData);
+        if(playSound)
+             play(sampleData);
         gl.updateTexture(backBuffer);
         drawScene();
+        oneLinerElt.focus();
     }
 
     document.getElementById("oneliner").focus();
     document.getElementById("oneliner").onkeyup = onKey;
-    document.getElementById("gen").onclick = onPlay;
+    document.getElementById("gen").onclick = onPlayButton;
 
 
 </script>

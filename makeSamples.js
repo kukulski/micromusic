@@ -34,17 +34,28 @@ function makeSampleFunction(rawOneLiner,elt) {
 
 function makeBulkSampleFunction(rawOneLiner){
     var oneLiner = preprocessFunction(rawOneLiner);
-    eval("var f = function (buf,count,t) {for(i=0; i<count;i++,t++) {buf[i]=(" + oneLiner + ");}}");
-    return f;
+  //  if(!makeFunction(oneLiner)) return null;
+    var toEval = "var f = function (buf,count,t) {for(i=0; i<count;i++,t++) {buf[i]=(" + oneLiner + ");}}";
+    return makeFunction(toEval) || nullFunction;
 }
 
 function makeBulkSample8BitFunction(rawOneLiner){
     var oneLiner = preprocessFunction(rawOneLiner);
-    eval("var f = function (buf,count,t) {for(i=0; i<count;i++,t++) {buf[i]=127+127*(" + oneLiner + ");}}");
+  //  if(!makeFunction(oneLiner)) return null;
+    var toEval = "var f =function(buf,count,t){for(i=0; i<count;i++,t++)buf[i]=127+127*(" + oneLiner + ");};"
+    return makeFunction(toEval) || nullFunction;
+}
+function makeFunction(evalString) {
+      try{
+        eval(evalString);
+    } catch(e){
+      return null;
+    }
     return f;
 }
-
-
+function nullFunction () {
+    return 1;
+}
 
 function generateSound(f,seconds,frequency,bitsPerSample,channels) {
     var count = frequency*seconds*channels;

@@ -86,11 +86,14 @@
     }
 
     var sampleData;
+    var lastOneLiner;
+    var lastAudioFunction;
     function updateAndMaybePlay(playSound) {
         //updateFunction();
         //if(!sampleFunction) return;
         var oneLiner = oneLinerElt.value;
-
+        var recalc = (oneLiner != lastOneLiner);
+        lastOneLiner = oneLiner;
 
         var bitsFunction = makeBulkSample8BitFunction(oneLiner);
         var audioFunction = makeBulkSampleFunction(oneLiner);
@@ -98,12 +101,14 @@
         sampleData = sampleData || new Uint8Array(256*1024);
         bitsFunction(sampleData,256*1024,0);
 
-        if(playSound)
+        if(playSound && audioFunction)
              play(audioFunction);
 
-        gl.updateTexture8(sampleData);
-        drawScene();
-        oneLinerElt.focus();
+        if(recalc) {
+            gl.updateTexture8(sampleData);
+            drawScene();
+        }
+               oneLinerElt.focus();
     }
 
     document.getElementById("oneliner").focus();

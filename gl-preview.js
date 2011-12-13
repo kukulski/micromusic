@@ -197,10 +197,11 @@
             gl.drawElements(gl.TRIANGLES, indexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
         }
 
-        function tick() {
-            requestAnimFrame(tick);
-            drawScene();
-        }
+//        function tick() {
+//            requestAnimFrame(tick);
+//            drawScene();
+//        }
+//        function requestDraw)
 
 
         function webGLStart() {
@@ -213,5 +214,6 @@
             gl.clearColor(0.0, 0.0, 0.0, 1.0);
             gl.enable(gl.DEPTH_TEST);
 
-            tick();
+            drawScene();
+           // tick();
         }

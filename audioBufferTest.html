@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>trvial audio generator node example</title>
+</head>
+<body>
+    'enter' -- play tone <br>
+    'esc' -- stop tone
+        <script type="text/javascript">
+
+
+            var context = webkitAudioContext && new webkitAudioContext();
+            context = context || (AudioContext && new AudioContext());
+
+            var t = 0;
+             var node = context.createJavaScriptNode(256, 0, 1);
+             node.onaudioprocess = function (event) {
+               var outBuf = event.outputBuffer;
+                var channel = outBuf.getChannelData(0);
+                var count = channel.length;
+                for(var i = 0; i < count; i++) {
+                   channel[i] = Math.sin(t++/10);
+                }
+
+              }
+
+           document.onkeydown = function(event) {
+
+               if(event.keyCode == 13)
+                  node.connect(context.destination);
+               if(event.keyCode == 27)
+                  node.disconnect();
+           }
+
+        </script>
+</body>
+</html>

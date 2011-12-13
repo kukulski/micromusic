@@ -1,5 +1,7 @@
 // Code in ~2 hours by Bemmu, idea and sound code snippet from Viznut.
 
+
+
 var replacements = {
     sin: "Math.sin",
     cos: "Math.cos",
@@ -17,6 +19,8 @@ function preprocessFunction(oneLiner) {
     }
     return oneLiner;
 }
+
+
 function makeSampleFunction(rawOneLiner,elt) {
     try {
         var oneLiner = preprocessFunction(rawOneLiner);
@@ -25,8 +29,15 @@ function makeSampleFunction(rawOneLiner,elt) {
        } catch(e) {
         if(elt) elt.innerHTML = e.toString();
         return null;
-    } 
+    }
 }
+
+function makeBulkSampleFunction(rawOneLiner){
+    var oneLiner = preprocessFunction(rawOneLiner);
+    eval("var f = function (buf,count,t) {for(i=0; i<count;i++,t++) {buf[i]=(" + oneLiner + ")}}");
+    return f;
+}
+
 
 
 function generateSound(f,seconds,frequency,bitsPerSample,channels) {
@@ -53,6 +64,20 @@ function genSound16x1(f,count) {
     return sampleArray;
 }
 
+var sampleHelper = {
+    samples8: null,
+    makeSampleData8: function(sampleFunction,wd,ht) {
+
+    var sampleCount = wd*ht;
+    this.samples8  = this.samples8 || new Uint8Array(sampleCount);
+    var s = this.samples8;
+
+    for (var t = 0; t < sampleCount; t++) {
+        s[t] = 127+127*sampleFunction(t);
+    }
+    return this.samples8;
+    }
+}
 
 function makeSampleData(sampleFunction) {
     var bitsPerSample = 16;

@@ -75,6 +75,46 @@
 
         }
 
+          gl.updateTexture8 = function (ourbuffer) {
+
+                try{
+                var width = 256;
+                var height = 1024;
+
+               gl.bindTexture(gl.TEXTURE_2D, gl.texture);
+               //     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+                    gl.texImage2D(gl.TEXTURE_2D,0, gl.LUMINANCE,
+                            width,height, 0,
+                            gl.LUMINANCE,gl.UNSIGNED_BYTE,ourbuffer);
+                    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+                    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+                    gl.bindTexture(gl.TEXTURE_2D, null);
+            } catch(e) { alert(e.toString());}
+
+        }
+
+                    gl.updateTextureFunction = function (fn) {
+
+                try{
+                var ourbuffer = new Uint8Array(theBuffer);
+                var count = ourbuffer.length>>1;
+
+                var width = 256;
+                var height = 1024;
+
+                       gl.bindTexture(gl.TEXTURE_2D, gl.texture);
+               //     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+                    gl.texImage2D(gl.TEXTURE_2D,0, gl.LUMINANCE_ALPHA,
+                            width,height, 0,
+                            gl.LUMINANCE_ALPHA,gl.UNSIGNED_BYTE,ourbuffer);
+                    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+                    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+                    gl.bindTexture(gl.TEXTURE_2D, null);
+            } catch(e) { alert(e.toString());}
+
+        }
+
+
             }
             catch (e) {
             }

@@ -8,7 +8,7 @@
     <script type="text/javascript" src="glMatrix095.js"></script>
     <script type="text/javascript" src="webGL-utils.js"></script>
     <script type="text/javascript" src="gl-preview.js"></script>
-    <script src="glue.js"></script>
+    <script src="webAudioGlue.js"></script>
     <script src="makeSamples.js"></script>
     <script src="benmu-riff.js"></script>
     <script src="benmu-dataurl.js"></script>
@@ -21,9 +21,9 @@
         void main(void) {
 
             vec4 samples = texture2D(uSampler, vec2(vTextureCoord.t, vTextureCoord.s));
-            float sample = samples.a;
-            float adjusted = sample > .5 ? sample -.5 : .5+sample;
-            gl_FragColor = vec4(adjusted, 0.0, 0.0, 1.0);
+          //  float sample = samples.a;
+           // float adjusted = sample > .5 ? sample -.5 : .5+sample;
+            gl_FragColor = vec4(samples.r, 0.0, 0.0, 1.0);
         }
     </script>
     <script id="shader-vs" type="text/x-vertex">
@@ -88,11 +88,11 @@
         updateFunction();
         if(!sampleFunction) return;
 
-        sampleData = makeSampleData(sampleFunction,256,1024);
+        sampleData = sampleHelper.makeSampleData8(sampleFunction,256,1024);
 
         if(playSound)
-             play(sampleData);
-        gl.updateTexture(backBuffer);
+             play(sampleFunction);
+        gl.updateTexture8(sampleData);
         drawScene();
         oneLinerElt.focus();
     }

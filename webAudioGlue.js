@@ -4,7 +4,7 @@ var useBuffer = true;
 var context = webkitAudioContext && new webkitAudioContext();
 context = context || (AudioContext && new AudioContext());
 
-
+if(!context) alert("your browser doesn't support the new web audio API.")
 var splitter = context.createChannelSplitter();
 splitter.connect(context.destination);
 

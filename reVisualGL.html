@@ -85,9 +85,14 @@
         updateAndMaybePlay(true);
     }
     function updateAndMaybePlay(playSound) {
-        updateFunction();
-        if(!sampleFunction) return;
+        var oneLiner = oneLinerElt.value;
 
+
+        var bitsFunction = makeBulkSample8BitFunction(oneLiner);
+        var audioFunction = makeBulkDampleFunction(oneLiner);
+
+        sampleData = sampleData || new Uint8Array(256*1024);
+        bitsFunction(sampleData,256*1024,0);
         sampleData = makeSampleData(sampleFunction,256,1024);
 
         if(playSound)

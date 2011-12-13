@@ -34,7 +34,13 @@ function makeSampleFunction(rawOneLiner,elt) {
 
 function makeBulkSampleFunction(rawOneLiner){
     var oneLiner = preprocessFunction(rawOneLiner);
-    eval("var f = function (buf,count,t) {for(i=0; i<count;i++,t++) {buf[i]=(" + oneLiner + ")}}");
+    eval("var f = function (buf,count,t) {for(i=0; i<count;i++,t++) {buf[i]=(" + oneLiner + ");}}");
+    return f;
+}
+
+function makeBulkSample8BitFunction(rawOneLiner){
+    var oneLiner = preprocessFunction(rawOneLiner);
+    eval("var f = function (buf,count,t) {for(i=0; i<count;i++,t++) {buf[i]=127+127*(" + oneLiner + ");}}");
     return f;
 }
 

@@ -84,14 +84,23 @@
     function onPlayButton() {
         updateAndMaybePlay(true);
     }
-    function updateAndMaybePlay(playSound) {
-        updateFunction();
-        if(!sampleFunction) return;
 
-        sampleData = sampleHelper.makeSampleData8(sampleFunction,256,1024);
+    var sampleData;
+    function updateAndMaybePlay(playSound) {
+        //updateFunction();
+        //if(!sampleFunction) return;
+        var oneLiner = oneLinerElt.value;
+
+
+        var bitsFunction = makeBulkSample8BitFunction(oneLiner);
+        var audioFunction = makeBulkSampleFunction(oneLiner);
+
+        sampleData = sampleData || new Uint8Array(256*1024);
+        bitsFunction(sampleData,256*1024,0);
 
         if(playSound)
-             play(sampleFunction);
+             play(audioFunction);
+
         gl.updateTexture8(sampleData);
         drawScene();
         oneLinerElt.focus();
